@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSK CREATION — Jewellery Making Materials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ TOKENS ============ */
+  :root{
+    --ivory:#FBF8F3;
+    --paper:#F3ECE1;
+    --ink:#2B241E;
+    --ink-soft:#5C5346;
+    --gold:#AD8A54;
+    --gold-deep:#8A6A3E;
+    --gold-bright:#C9A46A;
+    --line:#E4D6C3;
+    --ruby:#8B2635;
+    --emerald:#3F5E4A;
+    --sapphire:#2F4A6E;
+    --rose:#C99383;
+    --silver:#B9B9B9;
+    --pearl:#F1E9DD;
+    --white:#FFFFFF;
+    --radius-sm:6px;
+    --radius-md:14px;
+    --shadow-soft: 0 8px 24px rgba(43,36,30,0.07);
+    --shadow-lift: 0 16px 40px rgba(43,36,30,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    color:var(--ink);
+    margin:0;
+    letter-spacing:0.01em;
+  }
+
+  .mono{ font-family:'Space Mono', monospace; }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold-deep);
+    display:block;
+    margin-bottom:14px;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  img{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  section{ padding:88px 0; }
+  @media (max-width:768px){ section{ padding:56px 0; } }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:999px;
+    font-size:15px;
+    font-weight:500;
+    border:1px solid transparent;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    white-space:nowrap;
+  }
+  .btn:focus-visible{ outline:2px solid var(--gold-deep); outline-offset:3px; }
+  .btn-primary{ background:var(--ink); color:var(--ivory); }
+  .btn-primary:hover{ background:var(--gold-deep); transform:translateY(-1px); box-shadow:var(--shadow-soft); }
+  .btn-outline{ background:transparent; color:var(--ink); border-color:var(--ink); }
+  .btn-outline:hover{ background:var(--ink); color:var(--ivory); }
+  .btn-whatsapp{ background:#2F5F45; color:#fff; }
+  .btn-whatsapp:hover{ background:#274F3A; transform:translateY(-1px); box-shadow:var(--shadow-soft); }
+  .btn-sm{ padding:9px 16px; font-size:13px; }
+  .btn-block{ width:100%; justify-content:center; }
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+
+  /* ============ HEADER ============ */
+  header{
+    position:sticky; top:0; z-index:40;
+    background:rgba(251,248,243,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 0;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-badge{
+    width:42px; height:42px; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--gold-bright), var(--gold-deep));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond', serif; font-weight:700; color:#fff; font-size:15px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+    flex-shrink:0;
+  }
+  .brand-name{ font-family:'Cormorant Garamond', serif; font-size:22px; font-weight:600; letter-spacing:0.02em; }
+  .brand-name small{ display:block; font-family:'Space Mono', monospace; font-size:9.5px; letter-spacing:0.24em; color:var(--ink-soft); font-weight:400; text-transform:uppercase; }
+
+  nav.links{ display:flex; gap:34px; }
+  nav.links a{ font-size:14.5px; color:var(--ink-soft); position:relative; padding-bottom:4px; transition:color 0.15s ease;}
+  nav.links a::after{
+    content:''; position:absolute; left:0; bottom:0; height:1px; width:0; background:var(--gold-deep);
+    transition:width 0.2s ease;
+  }
+  nav.links a:hover{ color:var(--ink); }
+  nav.links a:hover::after{ width:100%; }
+
+  .nav-actions{ display:flex; align-items:center; gap:14px; }
+  .cart-btn{
+    position:relative; display:flex; align-items:center; gap:8px;
+    background:var(--paper); border:1px solid var(--line); border-radius:999px;
+    padding:9px 16px 9px 14px; font-size:13.5px; color:var(--ink);
+    transition:border-color 0.15s ease;
+  }
+  .cart-btn:hover{ border-color:var(--gold); }
+  .cart-count{
+    background:var(--ink); color:var(--ivory); font-size:11px; font-family:'Space Mono',monospace;
+    min-width:18px; height:18px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 4px;
+  }
+  .menu-toggle{ display:none; background:none; border:none; padding:6px; }
+
+  @media (max-width:860px){
+    nav.links{ display:none; }
+    .menu-toggle{ display:flex; }
+  }
+
+  /* ============ HERO ============ */
+  .hero{ padding-top:70px; padding-bottom:70px; }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .hero h1{ font-size:clamp(34px, 5vw, 56px); line-height:1.06; }
+  .hero p.lead{ margin-top:22px; font-size:16.5px; color:var(--ink-soft); max-width:46ch; }
+  .hero-ctas{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+
+  /* Signature: swatch sample card strung on thread */
+  .sample-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:34px 26px 26px; box-shadow:var(--shadow-soft); position:relative;
+  }
+  .sample-card .tag-hole{
+    position:absolute; top:16px; left:50%; transform:translateX(-50%);
+    width:14px; height:14px; border-radius:50%; background:var(--ivory); border:2px solid var(--line);
+  }
+  .sample-card .cap{
+    text-align:center; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:22px;
+  }
+  .thread-row{
+    display:flex; justify-content:space-between; align-items:flex-start; position:relative; gap:6px;
+    padding:0 4px;
+  }
+  .thread-row::before{
+    content:''; position:absolute; top:22px; left:6%; right:6%; height:1px;
+    background:repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 10px);
+  }
+  .swatch{ display:flex; flex-direction:column; align-items:center; gap:9px; position:relative; z-index:1; }
+  .swatch .dot{
+    width:40px; height:40px; border-radius:50%; box-shadow:0 3px 8px rgba(43,36,30,0.18), inset 0 0 0 1px rgba(255,255,255,0.4);
+    animation:sway 5.5s ease-in-out infinite;
+  }
+  .swatch:nth-child(2n) .dot{ animation-delay:0.6s; }
+  .swatch:nth-child(3n) .dot{ animation-delay:1.2s; }
+  @keyframes sway{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(3px) rotate(-2deg); }
+  }
+  .swatch .lbl{ font-family:'Space Mono',monospace; font-size:9.5px; color:var(--ink-soft); text-align:center; }
+  @media (max-width:520px){ .swatch .lbl{ display:none; } }
+
+  /* ============ SECTION HEADS ============ */
+  .section-head{ max-width:640px; margin-bottom:44px; }
+  .section-head h2{ font-size:clamp(28px,3.4vw,38px); }
+  .section-head p{ color:var(--ink-soft); margin-top:12px; font-size:15px; }
+
+  /* ============ CATEGORIES ============ */
+  .cat-grid{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:16px;
+  }
+  @media (max-width:960px){ .cat-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:560px){ .cat-grid{ grid-template-columns:repeat(2,1fr); } }
+  .cat-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:22px 16px; text-align:center; transition:transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .cat-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-soft); border-color:var(--gold); }
+  .cat-card .icon-wrap{
+    width:54px; height:54px; margin:0 auto 14px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cat-card svg{ width:26px; height:26px; }
+  .cat-card h3{ font-family:'Jost',sans-serif; font-weight:500; font-size:14.5px; }
+  .cat-card span{ display:block; font-size:12px; color:var(--ink-soft); margin-top:4px; }
+
+  /* ============ CATALOG ============ */
+  .filter-row{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px; }
+  .filter-chip{
+    padding:9px 18px; border-radius:999px; border:1px solid var(--line); background:var(--white);
+    font-size:13.5px; color:var(--ink-soft); transition:all 0.15s ease;
+  }
+  .filter-chip:hover{ border-color:var(--gold); color:var(--ink); }
+  .filter-chip.active{ background:var(--ink); color:var(--ivory); border-color:var(--ink); }
+
+  .product-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+  }
+  @media (max-width:900px){ .product-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .product-grid{ grid-template-columns:1fr; } }
+
+  .product-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
+    padding:20px; display:flex; flex-direction:column; gap:14px; transition:box-shadow 0.15s ease, border-color .15s ease;
+  }
+  .product-card:hover{ box-shadow:var(--shadow-soft); border-color:var(--gold); }
+  .product-media{
+    height:120px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  }
+  .product-media svg{ width:44px; height:44px; }
+  .product-info h3{ font-family:'Jost',sans-serif; font-weight:500; font-size:15.5px; margin-bottom:4px; }
+  .product-sku{ font-size:11px; color:var(--ink-soft); letter-spacing:0.03em; }
+  .product-unit{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; }
+  .product-price{ font-family:'Space Mono',monospace; font-size:17px; margin-top:10px; font-weight:700; }
+  .product-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:auto; padding-top:6px; }
+
+  .qty-stepper{
+    display:flex; align-items:center; border:1px solid var(--line); border-radius:999px; overflow:hidden;
+  }
+  .qty-stepper button{
+    background:none; border:none; width:28px; height:28px; font-size:15px; color:var(--ink); font-family:'Space Mono',monospace;
+  }
+  .qty-stepper button:hover{ background:var(--paper); }
+  .qty-stepper span{ width:26px; text-align:center; font-family:'Space Mono',monospace; font-size:13px; }
+
+  .add-btn{
+    background:var(--paper); border:1px solid var(--gold); color:var(--gold-deep);
+    border-radius:999px; padding:8px 16px; font-size:12.5px; font-weight:500;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .add-btn:hover{ background:var(--ink); border-color:var(--ink); color:var(--ivory); }
+  .add-btn.added{ background:var(--emerald); border-color:var(--emerald); color:#fff; }
+
+  /* ============ HOW IT WORKS ============ */
+  .steps{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:28px; position:relative;
+  }
+  @media (max-width:800px){ .steps{ grid-template-columns:1fr; } }
+  .step{ position:relative; padding:8px 4px; }
+  .step .num{
+    font-family:'Cormorant Garamond',serif; font-size:44px; font-weight:600; color:var(--gold);
+    line-height:1; margin-bottom:14px; display:block;
+  }
+  .step h3{ font-family:'Jost',sans-serif; font-weight:500; font-size:17px; margin-bottom:8px; }
+  .step p{ font-size:14px; color:var(--ink-soft); }
+
+  /* ============ ABOUT ============ */
+  .about-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:start; }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; } }
+  .about-grid p{ color:var(--ink-soft); font-size:15.5px; margin-top:16px; max-width:52ch; }
+  .trust-list{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:18px; }
+  .trust-list li{ display:flex; gap:14px; align-items:flex-start; }
+  .trust-list .ic{
+    width:34px; height:34px; border-radius:50%; background:var(--paper); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .trust-list svg{ width:16px; height:16px; }
+  .trust-list strong{ font-size:14.5px; font-weight:500; display:block; }
+  .trust-list span{ font-size:13px; color:var(--ink-soft); }
+
+  /* ============ FOOTER ============ */
+  footer{ background:var(--ink); color:var(--pearl); padding:60px 0 26px; }
+  .foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+  @media (max-width:700px){ .foot-grid{ grid-template-columns:1fr; gap:28px; } }
+  footer h4{ font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:14px; }
+  footer p, footer a{ font-size:14px; color:#D8D0C4; }
+  footer a:hover{ color:#fff; }
+  footer .foot-links{ display:flex; flex-direction:column; gap:10px; }
+  .foot-bottom{ border-top:1px solid rgba(255,255,255,0.12); padding-top:20px; font-size:12.5px; color:#9C9184; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  /* ============ CART DRAWER ============ */
+  .overlay{
+    position:fixed; inset:0; background:rgba(43,36,30,0.4); backdrop-filter:blur(2px);
+    opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:60;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+
+  .drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(400px, 92vw);
+    background:var(--ivory); z-index:61; box-shadow:var(--shadow-lift);
+    transform:translateX(100%); transition:transform 0.3s ease;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{ transform:translateX(0); }
+  .drawer-head{ display:flex; align-items:center; justify-content:space-between; padding:22px 24px; border-bottom:1px solid var(--line); }
+  .drawer-head h3{ font-size:20px; }
+  .drawer-close{ background:none; border:none; font-size:22px; color:var(--ink-soft); line-height:1; padding:4px; }
+  .drawer-close:hover{ color:var(--ink); }
+  .drawer-body{ flex:1; overflow-y:auto; padding:18px 24px; }
+  .drawer-empty{ text-align:center; padding:60px 10px; color:var(--ink-soft); font-size:14px; }
+  .cart-item{ display:flex; gap:12px; padding:16px 0; border-bottom:1px solid var(--line); }
+  .cart-item .thumb{ width:48px; height:48px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .cart-item .thumb svg{ width:22px; height:22px; }
+  .cart-item .ci-info{ flex:1; min-width:0; }
+  .cart-item .ci-info h4{ font-size:14px; font-weight:500; font-family:'Jost',sans-serif; }
+  .cart-item .ci-info .sku{ font-size:10.5px; color:var(--ink-soft); }
+  .cart-item .ci-row{ display:flex; align-items:center; justify-content:space-between; margin-top:8px; }
+  .cart-item .remove{ background:none; border:none; color:var(--ruby); font-size:12px; text-decoration:underline; padding:0; }
+  .cart-item .line-total{ font-family:'Space Mono',monospace; font-size:13px; font-weight:700; }
+  .drawer-foot{ border-top:1px solid var(--line); padding:20px 24px 26px; }
+  .cart-total-row{ display:flex; justify-content:space-between; font-size:15px; margin-bottom:16px; }
+  .cart-total-row strong{ font-family:'Space Mono',monospace; font-size:19px; }
+  .cart-note{ font-size:11.5px; color:var(--ink-soft); margin-top:10px; text-align:center; }
+
+  /* ============ WHATSAPP FAB ============ */
+  .wa-fab{
+    position:fixed; bottom:24px; right:24px; z-index:50;
+    width:58px; height:58px; border-radius:50%; background:#2F5F45; color:#fff;
+    display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-lift);
+    border:none; animation:pulse 2.8s ease-in-out infinite;
+  }
+  .wa-fab svg{ width:28px; height:28px; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(47,95,69,0.35), var(--shadow-lift); }
+    50%{ box-shadow:0 0 0 10px rgba(47,95,69,0), var(--shadow-lift); }
+  }
+
+  .visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="brand">
+      <div class="brand-badge">JSK</div>
+      <div class="brand-name">JSK CREATION<small>Jewellery Materials</small></div>
+    </a>
+    <nav class="links">
+      <a href="#categories">Materials</a>
+      <a href="#catalog">Catalog</a>
+      <a href="#how">How to order</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="cart-btn" id="cartOpenBtn" aria-haspopup="dialog">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="21" r="1.4"/><circle cx="17" cy="21" r="1.4"/></svg>
+        Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="top"></div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Wholesale · Retail · Custom Orders</span>
+      <h1>Jewellery making materials,<br>sourced &amp; sorted.</h1>
+      <p class="lead">Beads, chains, findings, stones, wire and tools for makers and small jewellery businesses — checked for quality, packed by weight or piece, ready when you are.</p>
+      <div class="hero-ctas">
+        <a href="#catalog" class="btn btn-primary">Browse the catalog</a>
+        <a href="#" class="btn btn-outline" id="heroWaBtn">Chat on WhatsApp</a>
+      </div>
+    </div>
+    <div class="sample-card" aria-hidden="false">
+      <div class="tag-hole"></div>
+      <div class="cap">Material sample card</div>
+      <div class="thread-row">
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #E7CB93, var(--gold-deep));"></div><span class="lbl">Gold</span></div>
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #ECECEC, var(--silver));"></div><span class="lbl">Silver</span></div>
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #E7B9AC, var(--rose));"></div><span class="lbl">Rose&nbsp;Gold</span></div>
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #FFFDF8, var(--pearl)); box-shadow:0 3px 8px rgba(43,36,30,0.18), inset 0 0 0 1px #ddd;"></div><span class="lbl">Pearl</span></div>
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #C24B5D, var(--ruby));"></div><span class="lbl">Ruby</span></div>
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #5C8C71, var(--emerald));"></div><span class="lbl">Emerald</span></div>
+        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #4E7099, var(--sapphire));"></div><span class="lbl">Sapphire</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATEGORIES ============ -->
+<section id="categories">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Shop by material</span>
+      <h2>Six aisles, everything a bench needs.</h2>
+    </div>
+    <div class="cat-grid">
+
+      <button class="cat-card" data-filter="beads">
+        <div class="icon-wrap" style="background:#F3ECE1;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.6"><circle cx="7" cy="8" r="3"/><circle cx="15" cy="7" r="2.4"/><circle cx="11" cy="15" r="3.4"/><circle cx="18" cy="16" r="2.2"/></svg>
+        </div>
+        <h3>Beads</h3><span>Glass, crystal, pearl</span>
+      </button>
+
+      <button class="cat-card" data-filter="chains">
+        <div class="icon-wrap" style="background:#EFEFEF;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--sapphire)" stroke-width="1.6"><rect x="3" y="6" width="7" height="5" rx="2.5"/><rect x="8.5" y="12" width="7" height="5" rx="2.5"/><rect x="14" y="6" width="7" height="5" rx="2.5"/></svg>
+        </div>
+        <h3>Chains</h3><span>Curb, cable, ball</span>
+      </button>
+
+      <button class="cat-card" data-filter="findings">
+        <div class="icon-wrap" style="background:#F1E9DD;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.6"><circle cx="9" cy="9" r="4"/><path d="M13 13l6 6M15 15l4-1-1 4"/></svg>
+        </div>
+        <h3>Findings</h3><span>Clasps, pins, rings</span>
+      </button>
+
+      <button class="cat-card" data-filter="stones">
+        <div class="icon-wrap" style="background:#EAF0EC;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="1.6"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3l3 6 3-6M12 9l-3 12M12 9l3 12"/></svg>
+        </div>
+        <h3>Stones</h3><span>Semi-precious, cut</span>
+      </button>
+
+      <button class="cat-card" data-filter="wire">
+        <div class="icon-wrap" style="background:#F3ECE1;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.6"><path d="M4 18c0-8 6-8 6-4s-4 4-4 0 5-9 10-9"/></svg>
+        </div>
+        <h3>Wire</h3><span>Copper, memory, plated</span>
+      </button>
+
+      <button class="cat-card" data-filter="tools">
+        <div class="icon-wrap" style="background:#EFEFEF;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.6"><path d="M14 3l7 7-8.5 8.5a2 2 0 0 1-2.8 0L4 12.8a2 2 0 0 1 0-2.8L14 3z"/><path d="M6 18l-2 3"/></svg>
+        </div>
+        <h3>Tools</h3><span>Pliers, cutters, boards</span>
+      </button>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATALOG ============ -->
+<section id="catalog" style="background:var(--paper);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Full catalog</span>
+      <h2>Add what you need, order when you're ready.</h2>
+      <p>Every item shows the pack unit — by weight, by length or by piece — so quantities are clear before you send the order.</p>
+    </div>
+
+    <div class="filter-row" id="filterRow">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="beads">Beads</button>
+      <button class="filter-chip" data-filter="chains">Chains</button>
+      <button class="filter-chip" data-filter="findings">Findings</button>
+      <button class="filter-chip" data-filter="stones">Stones</button>
+      <button class="filter-chip" data-filter="wire">Wire</button>
+      <button class="filter-chip" data-filter="tools">Tools</button>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Ordering</span>
+      <h2>No accounts, no checkout forms.</h2>
+      <p>Build your list on this page, then send it straight to our WhatsApp — that's the whole order process.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="num mono">01</span>
+        <h3>Add to cart</h3>
+        <p>Browse the catalog and set quantities for each material you need.</p>
+      </div>
+      <div class="step">
+        <span class="num mono">02</span>
+        <h3>Review your list</h3>
+        <p>Open the cart to check items, quantities and the total before sending.</p>
+      </div>
+      <div class="step">
+        <span class="num mono">03</span>
+        <h3>Send on WhatsApp</h3>
+        <p>One tap fills in your order as a message — just add your name and address and hit send.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" style="background:var(--paper);">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow">About JSK Creation</span>
+      <h2>Supplying the makers behind the jewellery.</h2>
+      <p>JSK Creation sources and sorts raw jewellery-making materials for artisans, home businesses and small manufacturers. Every batch of beads, stones and findings is checked before it's packed, so what arrives at your bench matches what you ordered.</p>
+      <p>We keep both bulk and small quantities in stock, because a sample order and a production order deserve the same care.</p>
+    </div>
+    <ul class="trust-list">
+      <li>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.8"><path d="M5 13l4 4L19 7"/></svg></div>
+        <div><strong>Quality checked material</strong><span>Every pack inspected before dispatch</span></div>
+      </li>
+      <li>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/></svg></div>
+        <div><strong>Bulk &amp; small quantities</strong><span>From a single strand to production runs</span></div>
+      </li>
+      <li>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-9.5 8.3A8.5 8.5 0 1 1 21 11.5z"/></svg></div>
+        <div><strong>Ordering over WhatsApp</strong><span>Ask questions, confirm stock, order — in one chat</span></div>
+      </li>
+      <li>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold-deep)" stroke-width="1.8"><path d="M3 12l2-7h14l2 7M5 12v7h14v-7M9 19v-4h6v4"/></svg></div>
+        <div><strong>Nationwide shipping</strong><span>Packed and dispatched across the country</span></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>JSK Creation</h4>
+        <p style="max-width:36ch;">Wholesale and retail jewellery making materials — beads, chains, findings, stones, wire and tools.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <div class="foot-links">
+          <a href="#" id="footWaLink">WhatsApp: +92 XXX XXXXXXX</a>
+          <a href="mailto:orders@jskcreation.com">orders@jskcreation.com</a>
+          <a href="#">Instagram: @jskcreation</a>
+        </div>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <div class="foot-links">
+          <span>Mon–Sat: 10:00 – 19:00</span>
+          <span>Sunday: Closed</span>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 JSK Creation. All rights reserved.</span>
+      <span>Orders are placed directly over WhatsApp.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ CART DRAWER ============ -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-label="Shopping cart">
+  <div class="drawer-head">
+    <h3>Your order</h3>
+    <button class="drawer-close" id="drawerClose" aria-label="Close cart">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <div class="drawer-empty">Your cart is empty.<br>Add materials from the catalog to build your order.</div>
+  </div>
+  <div class="drawer-foot" id="drawerFoot" style="display:none;">
+    <div class="cart-total-row"><span>Total</span><strong class="mono" id="cartTotal">Rs. 0</strong></div>
+    <button class="btn btn-whatsapp btn-block" id="sendWaBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.5 2 12.02c0 1.9.53 3.68 1.44 5.2L2 22l4.9-1.4a9.9 9.9 0 0 0 5.12 1.4c5.52 0 10.02-4.5 10.02-10.02C22.04 6.5 17.54 2 12.02 2zm5.9 14.3c-.25.7-1.44 1.34-1.98 1.4-.5.06-1.1.08-1.78-.11-.4-.12-.93-.3-1.6-.6-2.8-1.2-4.6-4-4.75-4.2-.14-.2-1.14-1.5-1.14-2.86 0-1.36.72-2.02.97-2.3.25-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.3.38-.44.5-.15.15-.3.3-.13.6.17.3.75 1.24 1.62 2 1.12.99 2.06 1.3 2.36 1.45.3.15.48.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.75-.16 1.45z"/></svg>
+      Send order on WhatsApp
+    </button>
+    <p class="cart-note">Opens WhatsApp with your order pre-filled. Add your name and address before sending.</p>
+  </div>
+</aside>
+
+<!-- ============ WHATSAPP FAB ============ -->
+<button class="wa-fab" id="waFab" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.5 2 12.02c0 1.9.53 3.68 1.44 5.2L2 22l4.9-1.4a9.9 9.9 0 0 0 5.12 1.4c5.52 0 10.02-4.5 10.02-10.02C22.04 6.5 17.54 2 12.02 2zm5.9 14.3c-.25.7-1.44 1.34-1.98 1.4-.5.06-1.1.08-1.78-.11-.4-.12-.93-.3-1.6-.6-2.8-1.2-4.6-4-4.75-4.2-.14-.2-1.14-1.5-1.14-2.86 0-1.36.72-2.02.97-2.3.25-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.3.38-.44.5-.15.15-.3.3-.13.6.17.3.75 1.24 1.62 2 1.12.99 2.06 1.3 2.36 1.45.3.15.48.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.75-.16 1.45z"/></svg>
+</button>
+
+<script>
+/* =====================================================
+   CONFIG — replace with your real WhatsApp number
+   Format: country code + number, no +, no spaces, no dashes
+   Example Pakistan number: 923001234567
+   ===================================================== */
+const WHATSAPP_NUMBER = "923052181963"; // <-- PUT YOUR REAL NUMBER HERE
+
+/* ============ PRODUCT DATA ============ */
+const PRODUCTS = [
+  {id:'bd101', name:'Glass Seed Beads — Rainbow Mix', sku:'JSK-BD-101', cat:'beads', unit:'per 50g pack', price:180, color:'#F3ECE1', stroke:'var(--gold-deep)'},
+  {id:'bd114', name:'Freshwater Pearl Beads — Round 8mm', sku:'JSK-BD-114', cat:'beads', unit:'per strand', price:650, color:'#F1E9DD', stroke:'var(--gold-deep)'},
+  {id:'bd122', name:'Faceted Crystal Beads — 6mm', sku:'JSK-BD-122', cat:'beads', unit:'per 20pc pack', price:320, color:'#EAF0EC', stroke:'var(--sapphire)'},
+
+  {id:'ch201', name:'Curb Chain — Gold Plated', sku:'JSK-CH-201', cat:'chains', unit:'per meter', price:240, color:'#F3ECE1', stroke:'var(--gold-deep)'},
+  {id:'ch207', name:'Cable Chain — Silver Plated', sku:'JSK-CH-207', cat:'chains', unit:'per meter', price:210, color:'#EFEFEF', stroke:'var(--sapphire)'},
+  {id:'ch215', name:'Ball Chain 2mm — Antique Brass', sku:'JSK-CH-215', cat:'chains', unit:'per meter', price:160, color:'#F1E9DD', stroke:'var(--gold-deep)'},
+
+  {id:'fd301', name:'Jump Rings — Mixed Sizes', sku:'JSK-FD-301', cat:'findings', unit:'per 100pc', price:90, color:'#F1E9DD', stroke:'var(--gold-deep)'},
+  {id:'fd308', name:'Lobster Clasps — Gold Tone', sku:'JSK-FD-308', cat:'findings', unit:'per 20pc', price:140, color:'#F3ECE1', stroke:'var(--gold-deep)'},
+  {id:'fd316', name:'Head Pins 3cm — Silver Tone', sku:'JSK-FD-316', cat:'findings', unit:'per 100pc', price:110, color:'#EFEFEF', stroke:'var(--sapphire)'},
+
+  {id:'st401', name:'Rose Quartz Chip Beads', sku:'JSK-ST-401', cat:'stones', unit:'per strand', price:380, color:'#F3E7E3', stroke:'var(--rose)'},
+  {id:'st409', name:'Turquoise Cabochons — 10mm', sku:'JSK-ST-409', cat:'stones', unit:'per 10pc', price:450, color:'#EAF0EC', stroke:'var(--emerald)'},
+  {id:'st417', name:'Amethyst Tumbled Beads', sku:'JSK-ST-417', cat:'stones', unit:'per strand', price:520, color:'#ECE7F1', stroke:'var(--sapphire)'},
+
+  {id:'wr501', name:'Copper Wire 0.6mm', sku:'JSK-WR-501', cat:'wire', unit:'per 10m spool', price:150, color:'#F3ECE1', stroke:'var(--gold-deep)'},
+  {id:'wr508', name:'Memory Wire — Bracelet Size', sku:'JSK-WR-508', cat:'wire', unit:'per 10-coil pack', price:220, color:'#EFEFEF', stroke:'var(--ink)'},
+  {id:'wr513', name:'Silver Plated Wire 0.4mm', sku:'JSK-WR-513', cat:'wire', unit:'per 10m spool', price:190, color:'#EFEFEF', stroke:'var(--sapphire)'},
+
+  {id:'tl601', name:'Round Nose Pliers', sku:'JSK-TL-601', cat:'tools', unit:'per piece', price:480, color:'#EFEFEF', stroke:'var(--ink)'},
+  {id:'tl607', name:'Flush Wire Cutters', sku:'JSK-TL-607', cat:'tools', unit:'per piece', price:550, color:'#EFEFEF', stroke:'var(--ink)'},
+  {id:'tl612', name:'Bead Design Board', sku:'JSK-TL-612', cat:'tools', unit:'per piece', price:350, color:'#F3ECE1', stroke:'var(--gold-deep)'},
+];
+
+const ICONS = {
+  beads:'<svg viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.5"><circle cx="7" cy="8" r="3"/><circle cx="15" cy="7" r="2.4"/><circle cx="11" cy="15" r="3.4"/><circle cx="18" cy="16" r="2.2"/></svg>',
+  chains:'<svg viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.5"><rect x="3" y="6" width="7" height="5" rx="2.5"/><rect x="8.5" y="12" width="7" height="5" rx="2.5"/><rect x="14" y="6" width="7" height="5" rx="2.5"/></svg>',
+  findings:'<svg viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.5"><circle cx="9" cy="9" r="4"/><path d="M13 13l6 6M15 15l4-1-1 4"/></svg>',
+  stones:'<svg viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.5"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3l3 6 3-6M12 9l-3 12M12 9l3 12"/></svg>',
+  wire:'<svg viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.5"><path d="M4 18c0-8 6-8 6-4s-4 4-4 0 5-9 10-9"/></svg>',
+  tools:'<svg viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.5"><path d="M14 3l7 7-8.5 8.5a2 2 0 0 1-2.8 0L4 12.8a2 2 0 0 1 0-2.8L14 3z"/><path d="M6 18l-2 3"/></svg>'
+};
+
+function iconFor(cat, color){ return ICONS[cat].replace('{c}', color); }
+
+/* ============ STATE (in-memory only) ============ */
+let cart = {}; // id -> qty
+let displayQty = {}; // id -> qty selector on card (pre-add-to-cart)
+let activeFilter = 'all';
+
+/* ============ RENDER CATALOG ============ */
+const grid = document.getElementById('productGrid');
+
+function renderCatalog(){
+  grid.innerHTML = '';
+  const list = activeFilter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeFilter);
+  list.forEach(p => {
+    if(displayQty[p.id] === undefined) displayQty[p.id] = 1;
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-media" style="background:${p.color};">${iconFor(p.cat, p.stroke)}</div>
+      <div class="product-info">
+        <h3>${p.name}</h3>
+        <div class="product-sku mono">${p.sku}</div>
+        <div class="product-unit">${p.unit}</div>
+        <div class="product-price">Rs. ${p.price}</div>
+      </div>
+      <div class="product-foot">
+        <div class="qty-stepper">
+          <button data-act="dec" data-id="${p.id}" aria-label="Decrease quantity">–</button>
+          <span id="qty-${p.id}">${displayQty[p.id]}</span>
+          <button data-act="inc" data-id="${p.id}" aria-label="Increase quantity">+</button>
+        </div>
+        <button class="add-btn" data-add="${p.id}">Add to cart</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+grid.addEventListener('click', (e) => {
+  const decBtn = e.target.closest('[data-act="dec"]');
+  const incBtn = e.target.closest('[data-act="inc"]');
+  const addBtn = e.target.closest('[data-add]');
+  if(decBtn){
+    const id = decBtn.dataset.id;
+    displayQty[id] = Math.max(1, (displayQty[id]||1) - 1);
+    document.getElementById('qty-'+id).textContent = displayQty[id];
+  }
+  if(incBtn){
+    const id = incBtn.dataset.id;
+    displayQty[id] = Math.min(99, (displayQty[id]||1) + 1);
+    document.getElementById('qty-'+id).textContent = displayQty[id];
+  }
+  if(addBtn){
+    const id = addBtn.dataset.add;
+    const qty = displayQty[id] || 1;
+    cart[id] = (cart[id] || 0) + qty;
+    renderCart();
+    addBtn.textContent = 'Added ✓';
+    addBtn.classList.add('added');
+    setTimeout(() => { addBtn.textContent = 'Add to cart'; addBtn.classList.remove('added'); }, 1100);
+  }
+});
+
+/* ============ FILTER CHIPS ============ */
+document.getElementById('filterRow').addEventListener('click', (e) => {
+  const chip = e.target.closest('.filter-chip');
+  if(!chip) return;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeFilter = chip.dataset.filter;
+  renderCatalog();
+});
+
+/* also let category cards jump + filter */
+document.querySelectorAll('.cat-card').forEach(c => {
+  c.addEventListener('click', () => {
+    const f = c.dataset.filter;
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.filter === f);
+    });
+    activeFilter = f;
+    renderCatalog();
+    document.getElementById('catalog').scrollIntoView({behavior:'smooth'});
+  });
+});
+
+/* ============ CART DRAWER ============ */
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+const drawerBody = document.getElementById('drawerBody');
+const drawerFoot = document.getElementById('drawerFoot');
+const cartCountEl = document.getElementById('cartCount');
+const cartTotalEl = document.getElementById('cartTotal');
+
+function openDrawer(){ overlay.classList.add('open'); drawer.classList.add('open'); }
+function closeDrawer(){ overlay.classList.remove('open'); drawer.classList.remove('open'); }
+
+document.getElementById('cartOpenBtn').addEventListener('click', openDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+
+function cartEntries(){
+  return Object.entries(cart).filter(([id,qty]) => qty > 0).map(([id,qty]) => {
+    const p = PRODUCTS.find(pr => pr.id === id);
+    return { ...p, qty };
+  });
+}
+
+function renderCart(){
+  const entries = cartEntries();
+  const count = entries.reduce((s,e) => s + e.qty, 0);
+  cartCountEl.textContent = count;
+
+  if(entries.length === 0){
+    drawerBody.innerHTML = '<div class="drawer-empty">Your cart is empty.<br>Add materials from the catalog to build your order.</div>';
+    drawerFoot.style.display = 'none';
+    return;
+  }
+
+  drawerFoot.style.display = 'block';
+  let total = 0;
+  drawerBody.innerHTML = entries.map(e => {
+    const lineTotal = e.price * e.qty;
+    total += lineTotal;
+    return `
+      <div class="cart-item">
+        <div class="thumb" style="background:${e.color};">${iconFor(e.cat, e.stroke)}</div>
+        <div class="ci-info">
+          <h4>${e.name}</h4>
+          <div class="sku mono">${e.sku}</div>
+          <div class="ci-row">
+            <div class="qty-stepper">
+              <button data-cart-act="dec" data-cart-id="${e.id}" aria-label="Decrease quantity">–</button>
+              <span>${e.qty}</span>
+              <button data-cart-act="inc" data-cart-id="${e.id}" aria-label="Increase quantity">+</button>
+            </div>
+            <span class="line-total">Rs. ${lineTotal}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('') + `<button class="remove" id="clearCartBtn" style="margin-top:8px;background:none;border:none;color:var(--ruby);font-size:12px;text-decoration:underline;">Clear cart</button>`;
+
+  cartTotalEl.textContent = 'Rs. ' + total.toLocaleString('en-IN');
+}
+
+drawerBody.addEventListener('click', (e) => {
+  const decBtn = e.target.closest('[data-cart-act="dec"]');
+  const incBtn = e.target.closest('[data-cart-act="inc"]');
+  const clearBtn = e.target.closest('#clearCartBtn');
+  if(decBtn){
+    const id = decBtn.dataset.cartId;
+    cart[id] = Math.max(0, (cart[id]||0) - 1);
+    renderCart();
+  }
+  if(incBtn){
+    const id = incBtn.dataset.cartId;
+    cart[id] = (cart[id]||0) + 1;
+    renderCart();
+  }
+  if(clearBtn){
+    cart = {};
+    renderCart();
+  }
+});
+
+/* ============ SEND TO WHATSAPP ============ */
+function buildOrderMessage(){
+  const entries = cartEntries();
+  let msg = `Hello JSK Creation! I'd like to order:\n\n`;
+  let total = 0;
+  entries.forEach((e,i) => {
+    const lineTotal = e.price * e.qty;
+    total += lineTotal;
+    msg += `${i+1}. ${e.name} (${e.sku}) — Qty: ${e.qty} x Rs.${e.price} = Rs.${lineTotal}\n`;
+  });
+  msg += `\nTotal: Rs. ${total}\n\nName: \nAddress: \nCity: `;
+  return msg;
+}
+
+function openWhatsApp(message){
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
+document.getElementById('sendWaBtn').addEventListener('click', () => {
+  if(cartEntries().length === 0) return;
+  openWhatsApp(buildOrderMessage());
+});
+
+/* generic "chat with us" buttons — no order attached */
+function openPlainChat(){
+  const msg = "Hello JSK Creation! I have a question about your jewellery making materials.";
+  openWhatsApp(msg);
+}
+document.getElementById('heroWaBtn').addEventListener('click', (e) => { e.preventDefault(); openPlainChat(); });
+document.getElementById('footWaLink').addEventListener('click', (e) => { e.preventDefault(); openPlainChat(); });
+document.getElementById('waFab').addEventListener('click', () => {
+  if(cartEntries().length > 0){ openDrawer(); } else { openPlainChat(); }
+});
+
+/* ============ INIT ============ */
+renderCatalog();
+renderCart();
+</script>
+
+</body>
+</html>
