@@ -160,49 +160,10 @@
 
   /* ============ HERO ============ */
   .hero{ padding-top:70px; padding-bottom:70px; }
-  .hero-grid{
-    display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;
-  }
-  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
-
+  .hero-simple{ max-width:700px; text-align:center; margin:0 auto; }
   .hero h1{ font-size:clamp(34px, 5vw, 56px); line-height:1.06; }
-  .hero p.lead{ margin-top:22px; font-size:16.5px; color:var(--ink-soft); max-width:46ch; }
-  .hero-ctas{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
-
-  /* Signature: swatch sample card strung on thread */
-  .sample-card{
-    background:var(--white); border:1px solid var(--line); border-radius:var(--radius-md);
-    padding:34px 26px 26px; box-shadow:var(--shadow-soft); position:relative;
-  }
-  .sample-card .tag-hole{
-    position:absolute; top:16px; left:50%; transform:translateX(-50%);
-    width:14px; height:14px; border-radius:50%; background:var(--ivory); border:2px solid var(--line);
-  }
-  .sample-card .cap{
-    text-align:center; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:0.16em;
-    text-transform:uppercase; color:var(--ink-soft); margin-bottom:22px;
-  }
-  .thread-row{
-    display:flex; justify-content:space-between; align-items:flex-start; position:relative; gap:6px;
-    padding:0 4px;
-  }
-  .thread-row::before{
-    content:''; position:absolute; top:22px; left:6%; right:6%; height:1px;
-    background:repeating-linear-gradient(90deg, var(--gold) 0 6px, transparent 6px 10px);
-  }
-  .swatch{ display:flex; flex-direction:column; align-items:center; gap:9px; position:relative; z-index:1; }
-  .swatch .dot{
-    width:40px; height:40px; border-radius:50%; box-shadow:0 3px 8px rgba(43,36,30,0.18), inset 0 0 0 1px rgba(255,255,255,0.4);
-    animation:sway 5.5s ease-in-out infinite;
-  }
-  .swatch:nth-child(2n) .dot{ animation-delay:0.6s; }
-  .swatch:nth-child(3n) .dot{ animation-delay:1.2s; }
-  @keyframes sway{
-    0%,100%{ transform:translateY(0) rotate(0deg); }
-    50%{ transform:translateY(3px) rotate(-2deg); }
-  }
-  .swatch .lbl{ font-family:'Space Mono',monospace; font-size:9.5px; color:var(--ink-soft); text-align:center; }
-  @media (max-width:520px){ .swatch .lbl{ display:none; } }
+  .hero p.lead{ margin:22px auto 0; font-size:16.5px; color:var(--ink-soft); max-width:46ch; }
+  .hero-ctas{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; justify-content:center; }
 
   /* ============ SECTION HEADS ============ */
   .section-head{ max-width:640px; margin-bottom:44px; }
@@ -346,6 +307,21 @@
   .cart-total-row strong{ font-family:'Space Mono',monospace; font-size:19px; }
   .cart-note{ font-size:11.5px; color:var(--ink-soft); margin-top:10px; text-align:center; }
 
+  /* ============ CHECKOUT FORM ============ */
+  .checkout-view{ display:flex; flex-direction:column; flex:1; min-height:0; }
+  .checkout-view .drawer-body{ flex:1; overflow-y:auto; }
+  .checkout-intro{ font-size:13.5px; color:var(--ink-soft); margin-bottom:18px; }
+  .field{ display:block; margin-bottom:16px; }
+  .field span{ display:block; font-size:12.5px; font-weight:500; color:var(--ink); margin-bottom:6px; }
+  .field span em{ font-style:normal; color:var(--ink-soft); font-weight:400; }
+  .field input, .field textarea{
+    width:100%; border:1px solid var(--line); border-radius:8px; padding:10px 12px;
+    font-family:'Jost',sans-serif; font-size:14px; color:var(--ink); background:var(--white);
+    resize:vertical; transition:border-color 0.15s ease;
+  }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--gold); }
+  .field-error{ font-size:12.5px; color:var(--ruby); margin-top:-4px; margin-bottom:6px; }
+
   /* ============ WHATSAPP FAB ============ */
   .wa-fab{
     position:fixed; bottom:24px; right:24px; z-index:50;
@@ -391,28 +367,13 @@
 
 <!-- ============ HERO ============ -->
 <section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow">Wholesale · Retail · Custom Orders</span>
-      <h1>Jewellery making materials,<br>sourced &amp; sorted.</h1>
-      <p class="lead">Beads, chains, findings, stones, wire and tools for makers and small jewellery businesses — checked for quality, packed by weight or piece, ready when you are.</p>
-      <div class="hero-ctas">
-        <a href="#catalog" class="btn btn-primary">Browse the catalog</a>
-        <a href="#" class="btn btn-outline" id="heroWaBtn">Chat on WhatsApp</a>
-      </div>
-    </div>
-    <div class="sample-card" aria-hidden="false">
-      <div class="tag-hole"></div>
-      <div class="cap">Material sample card</div>
-      <div class="thread-row">
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #E7CB93, var(--gold-deep));"></div><span class="lbl">Gold</span></div>
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #ECECEC, var(--silver));"></div><span class="lbl">Silver</span></div>
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #E7B9AC, var(--rose));"></div><span class="lbl">Rose&nbsp;Gold</span></div>
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #FFFDF8, var(--pearl)); box-shadow:0 3px 8px rgba(43,36,30,0.18), inset 0 0 0 1px #ddd;"></div><span class="lbl">Pearl</span></div>
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #C24B5D, var(--ruby));"></div><span class="lbl">Ruby</span></div>
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #5C8C71, var(--emerald));"></div><span class="lbl">Emerald</span></div>
-        <div class="swatch"><div class="dot" style="background:radial-gradient(circle at 32% 28%, #4E7099, var(--sapphire));"></div><span class="lbl">Sapphire</span></div>
-      </div>
+  <div class="wrap hero-simple">
+    <span class="eyebrow">Wholesale · Retail · Custom Orders</span>
+    <h1>Jewellery making materials,<br>sourced &amp; sorted.</h1>
+    <p class="lead">Beads, chains, findings, stones, wire and tools for makers and small jewellery businesses — checked for quality, packed by weight or piece, ready when you are.</p>
+    <div class="hero-ctas">
+      <a href="#catalog" class="btn btn-primary">Browse the catalog</a>
+      <a href="#" class="btn btn-outline" id="heroWaBtn">Chat on WhatsApp</a>
     </div>
   </div>
 </section>
@@ -596,11 +557,44 @@
   </div>
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
     <div class="cart-total-row"><span>Total</span><strong class="mono" id="cartTotal">Rs. 0</strong></div>
-    <button class="btn btn-whatsapp btn-block" id="sendWaBtn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.5 2 12.02c0 1.9.53 3.68 1.44 5.2L2 22l4.9-1.4a9.9 9.9 0 0 0 5.12 1.4c5.52 0 10.02-4.5 10.02-10.02C22.04 6.5 17.54 2 12.02 2zm5.9 14.3c-.25.7-1.44 1.34-1.98 1.4-.5.06-1.1.08-1.78-.11-.4-.12-.93-.3-1.6-.6-2.8-1.2-4.6-4-4.75-4.2-.14-.2-1.14-1.5-1.14-2.86 0-1.36.72-2.02.97-2.3.25-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.3.38-.44.5-.15.15-.3.3-.13.6.17.3.75 1.24 1.62 2 1.12.99 2.06 1.3 2.36 1.45.3.15.48.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.75-.16 1.45z"/></svg>
-      Send order on WhatsApp
-    </button>
-    <p class="cart-note">Opens WhatsApp with your order pre-filled. Add your name and address before sending.</p>
+    <button class="btn btn-whatsapp btn-block" id="proceedBtn">Proceed to checkout</button>
+    <p class="cart-note">You'll add your delivery details on the next step.</p>
+  </div>
+
+  <!-- Checkout form — shown only when the customer proceeds -->
+  <div class="checkout-view" id="checkoutView" style="display:none;">
+    <div class="drawer-body">
+      <p class="checkout-intro">Add your details so we can confirm and dispatch your order.</p>
+      <label class="field">
+        <span>Full name <em>*</em></span>
+        <input type="text" id="custName" placeholder="e.g. Ahmed Raza" autocomplete="name">
+      </label>
+      <label class="field">
+        <span>Phone number <em>*</em></span>
+        <input type="tel" id="custPhone" placeholder="e.g. 0300 1234567" autocomplete="tel">
+      </label>
+      <label class="field">
+        <span>Delivery address <em>*</em></span>
+        <textarea id="custAddress" rows="2" placeholder="House / street / area"></textarea>
+      </label>
+      <label class="field">
+        <span>City <em>*</em></span>
+        <input type="text" id="custCity" placeholder="e.g. Khairpur" autocomplete="address-level2">
+      </label>
+      <label class="field">
+        <span>Notes <em>(optional)</em></span>
+        <textarea id="custNotes" rows="2" placeholder="Preferred delivery time, courier preference, etc."></textarea>
+      </label>
+      <p class="field-error" id="checkoutError" style="display:none;">Please fill in name, phone, address and city before sending.</p>
+    </div>
+    <div class="drawer-foot">
+      <button class="btn btn-outline btn-block" id="backToCartBtn" style="margin-bottom:10px;">Back to cart</button>
+      <button class="btn btn-whatsapp btn-block" id="sendWaBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.5 2 12.02c0 1.9.53 3.68 1.44 5.2L2 22l4.9-1.4a9.9 9.9 0 0 0 5.12 1.4c5.52 0 10.02-4.5 10.02-10.02C22.04 6.5 17.54 2 12.02 2zm5.9 14.3c-.25.7-1.44 1.34-1.98 1.4-.5.06-1.1.08-1.78-.11-.4-.12-.93-.3-1.6-.6-2.8-1.2-4.6-4-4.75-4.2-.14-.2-1.14-1.5-1.14-2.86 0-1.36.72-2.02.97-2.3.25-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.3.38-.44.5-.15.15-.3.3-.13.6.17.3.75 1.24 1.62 2 1.12.99 2.06 1.3 2.36 1.45.3.15.48.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.75-.16 1.45z"/></svg>
+        Confirm &amp; send on WhatsApp
+      </button>
+      <p class="cart-note">Opens WhatsApp with your order and details filled in, ready to send.</p>
+    </div>
   </div>
 </aside>
 
@@ -747,12 +741,28 @@ const drawerFoot = document.getElementById('drawerFoot');
 const cartCountEl = document.getElementById('cartCount');
 const cartTotalEl = document.getElementById('cartTotal');
 
-function openDrawer(){ overlay.classList.add('open'); drawer.classList.add('open'); }
-function closeDrawer(){ overlay.classList.remove('open'); drawer.classList.remove('open'); }
+const checkoutView = document.getElementById('checkoutView');
 
-document.getElementById('cartOpenBtn').addEventListener('click', openDrawer);
+function showCartView(){
+  checkoutView.style.display = 'none';
+  drawerBody.style.display = 'block';
+  drawerFoot.style.display = cartEntries().length ? 'block' : 'none';
+}
+function showCheckoutView(){
+  drawerBody.style.display = 'none';
+  drawerFoot.style.display = 'none';
+  checkoutView.style.display = 'flex';
+  document.getElementById('checkoutError').style.display = 'none';
+}
+
+function openDrawer(){ overlay.classList.add('open'); drawer.classList.add('open'); }
+function closeDrawer(){ overlay.classList.remove('open'); drawer.classList.remove('open'); showCartView(); }
+
+document.getElementById('cartOpenBtn').addEventListener('click', () => { showCartView(); openDrawer(); });
 document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 overlay.addEventListener('click', closeDrawer);
+document.getElementById('proceedBtn').addEventListener('click', showCheckoutView);
+document.getElementById('backToCartBtn').addEventListener('click', showCartView);
 
 function cartEntries(){
   return Object.entries(cart).filter(([id,qty]) => qty > 0).map(([id,qty]) => {
@@ -820,16 +830,25 @@ drawerBody.addEventListener('click', (e) => {
 });
 
 /* ============ SEND TO WHATSAPP ============ */
-function buildOrderMessage(){
+function buildOrderMessage(customer){
   const entries = cartEntries();
-  let msg = `Hello JSK Creation! I'd like to order:\n\n`;
   let total = 0;
+  let itemLines = '';
   entries.forEach((e,i) => {
     const lineTotal = e.price * e.qty;
     total += lineTotal;
-    msg += `${i+1}. ${e.name} (${e.sku}) — Qty: ${e.qty} x Rs.${e.price} = Rs.${lineTotal}\n`;
+    itemLines += `${i+1}. ${e.name} (${e.sku})\n   Qty: ${e.qty}  ×  Rs.${e.price}  =  Rs.${lineTotal}\n`;
   });
-  msg += `\nTotal: Rs. ${total}\n\nName: \nAddress: \nCity: `;
+
+  let msg = `Hello JSK Creation, I would like to place an order.\n\n`;
+  msg += `ORDER DETAILS\n${itemLines}\nTotal: Rs. ${total}\n\n`;
+  msg += `CUSTOMER DETAILS\n`;
+  msg += `Name: ${customer.name}\n`;
+  msg += `Phone: ${customer.phone}\n`;
+  msg += `Address: ${customer.address}\n`;
+  msg += `City: ${customer.city}\n`;
+  if(customer.notes) msg += `Notes: ${customer.notes}\n`;
+  msg += `\nPlease confirm availability and delivery time. Thank you.`;
   return msg;
 }
 
@@ -840,7 +859,21 @@ function openWhatsApp(message){
 
 document.getElementById('sendWaBtn').addEventListener('click', () => {
   if(cartEntries().length === 0) return;
-  openWhatsApp(buildOrderMessage());
+
+  const customer = {
+    name: document.getElementById('custName').value.trim(),
+    phone: document.getElementById('custPhone').value.trim(),
+    address: document.getElementById('custAddress').value.trim(),
+    city: document.getElementById('custCity').value.trim(),
+    notes: document.getElementById('custNotes').value.trim(),
+  };
+
+  if(!customer.name || !customer.phone || !customer.address || !customer.city){
+    document.getElementById('checkoutError').style.display = 'block';
+    return;
+  }
+
+  openWhatsApp(buildOrderMessage(customer));
 });
 
 /* generic "chat with us" buttons — no order attached */
