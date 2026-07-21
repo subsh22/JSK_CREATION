@@ -211,8 +211,10 @@
   .product-card:hover{ box-shadow:var(--shadow-soft); border-color:var(--gold); }
   .product-media{
     height:120px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
   }
   .product-media svg{ width:44px; height:44px; }
+  .product-media img{ width:100%; height:100%; object-fit:cover; }
   .product-info h3{ font-family:'Jost',sans-serif; font-weight:500; font-size:15.5px; margin-bottom:4px; }
   .product-sku{ font-size:11px; color:var(--ink-soft); letter-spacing:0.03em; }
   .product-unit{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; }
@@ -271,6 +273,14 @@
   footer p, footer a{ font-size:14px; color:#D8D0C4; }
   footer a:hover{ color:#fff; }
   footer .foot-links{ display:flex; flex-direction:column; gap:10px; }
+  .social-row{ display:flex; gap:10px; margin-top:16px; }
+  .social-icon{
+    width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,0.18);
+    display:flex; align-items:center; justify-content:center; color:#D8D0C4;
+    transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .social-icon svg{ width:16px; height:16px; }
+  .social-icon:hover{ background:var(--gold-deep); border-color:var(--gold-deep); color:#fff; }
   .foot-bottom{ border-top:1px solid rgba(255,255,255,0.12); padding-top:20px; font-size:12.5px; color:#9C9184; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
 
   /* ============ CART DRAWER ============ */
@@ -294,7 +304,8 @@
   .drawer-body{ flex:1; overflow-y:auto; padding:18px 24px; }
   .drawer-empty{ text-align:center; padding:60px 10px; color:var(--ink-soft); font-size:14px; }
   .cart-item{ display:flex; gap:12px; padding:16px 0; border-bottom:1px solid var(--line); }
-  .cart-item .thumb{ width:48px; height:48px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .cart-item .thumb{ width:48px; height:48px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .cart-item .thumb img{ width:100%; height:100%; object-fit:cover; }
   .cart-item .thumb svg{ width:22px; height:22px; }
   .cart-item .ci-info{ flex:1; min-width:0; }
   .cart-item .ci-info h4{ font-size:14px; font-weight:500; font-family:'Jost',sans-serif; }
@@ -461,8 +472,8 @@
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Ordering</span>
-      <h2>No accounts, no checkout forms.</h2>
-      <p>Build your list on this page, then send it straight to our WhatsApp — that's the whole order process.</p>
+      <h2>From your cart to our WhatsApp, in three steps.</h2>
+      <p>No account to create — just build your list, add your delivery details, and send it straight to our WhatsApp.</p>
     </div>
     <div class="steps">
       <div class="step">
@@ -472,13 +483,13 @@
       </div>
       <div class="step">
         <span class="num mono">02</span>
-        <h3>Review your list</h3>
-        <p>Open the cart to check items, quantities and the total before sending.</p>
+        <h3>Add your details</h3>
+        <p>Proceed to checkout and fill in your name, phone, address and city.</p>
       </div>
       <div class="step">
         <span class="num mono">03</span>
         <h3>Send on WhatsApp</h3>
-        <p>One tap fills in your order as a message — just add your name and address and hit send.</p>
+        <p>Your order and details are filled in as a message — just hit send.</p>
       </div>
     </div>
   </div>
@@ -527,7 +538,20 @@
         <div class="foot-links">
           <a href="#" id="footWaLink">WhatsApp: +92 XXX XXXXXXX</a>
           <a href="mailto:orders@jskcreation.com">orders@jskcreation.com</a>
-          <a href="#">Instagram: @jskcreation</a>
+        </div>
+        <div class="social-row">
+          <a href="https://instagram.com/jskcreation" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+          </a>
+          <a href="https://facebook.com/jskcreation" target="_blank" rel="noopener" class="social-icon" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 8h2V4h-2a4 4 0 0 0-4 4v2H9v4h2v6h4v-6h2.5l.5-4H15V8z"/></svg>
+          </a>
+          <a href="https://tiktok.com/@jskcreation" target="_blank" rel="noopener" class="social-icon" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.47"/><path d="M14 3c0 2.5 2 4.5 4.5 4.5"/></svg>
+          </a>
+          <a href="#" id="footWaIcon" class="social-icon" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.5 2 12.02c0 1.9.53 3.68 1.44 5.2L2 22l4.9-1.4a9.9 9.9 0 0 0 5.12 1.4c5.52 0 10.02-4.5 10.02-10.02C22.04 6.5 17.54 2 12.02 2zm5.9 14.3c-.25.7-1.44 1.34-1.98 1.4-.5.06-1.1.08-1.78-.11-.4-.12-.93-.3-1.6-.6-2.8-1.2-4.6-4-4.75-4.2-.14-.2-1.14-1.5-1.14-2.86 0-1.36.72-2.02.97-2.3.25-.28.56-.35.75-.35h.53c.17 0 .4-.06.62.48.25.6.85 2.06.92 2.2.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.3.38-.44.5-.15.15-.3.3-.13.6.17.3.75 1.24 1.62 2 1.12.99 2.06 1.3 2.36 1.45.3.15.48.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.66-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.75-.16 1.45z"/></svg>
+          </a>
         </div>
       </div>
       <div>
@@ -609,33 +633,38 @@
    Format: country code + number, no +, no spaces, no dashes
    Example Pakistan number: 923001234567
    ===================================================== */
-const WHATSAPP_NUMBER = "923052181963"; // <-- PUT YOUR REAL NUMBER HERE
+const WHATSAPP_NUMBER = "923001234567"; // <-- PUT YOUR REAL NUMBER HERE
 
-/* ============ PRODUCT DATA ============ */
+/* ============ PRODUCT DATA ============
+   To add a real photo for any product, set its "img" to an image URL, e.g.:
+     img: "https://your-image-host.com/gold-chain.jpg"
+   Leave it as null to keep the plain icon shown now.
+   See the note below the catalog section for hosting options.
+   ==================================================== */
 const PRODUCTS = [
-  {id:'bd101', name:'Glass Seed Beads — Rainbow Mix', sku:'JSK-BD-101', cat:'beads', unit:'per 50g pack', price:180, color:'#F3ECE1', stroke:'var(--gold-deep)'},
-  {id:'bd114', name:'Freshwater Pearl Beads — Round 8mm', sku:'JSK-BD-114', cat:'beads', unit:'per strand', price:650, color:'#F1E9DD', stroke:'var(--gold-deep)'},
-  {id:'bd122', name:'Faceted Crystal Beads — 6mm', sku:'JSK-BD-122', cat:'beads', unit:'per 20pc pack', price:320, color:'#EAF0EC', stroke:'var(--sapphire)'},
+  {id:'bd101', name:'Glass Seed Beads — Rainbow Mix', sku:'JSK-BD-101', cat:'beads', unit:'per 50g pack', price:180, color:'#F3ECE1', stroke:'var(--gold-deep)', img:null},
+  {id:'bd114', name:'Freshwater Pearl Beads — Round 8mm', sku:'JSK-BD-114', cat:'beads', unit:'per strand', price:650, color:'#F1E9DD', stroke:'var(--gold-deep)', img:null},
+  {id:'bd122', name:'Faceted Crystal Beads — 6mm', sku:'JSK-BD-122', cat:'beads', unit:'per 20pc pack', price:320, color:'#EAF0EC', stroke:'var(--sapphire)', img:null},
 
-  {id:'ch201', name:'Curb Chain — Gold Plated', sku:'JSK-CH-201', cat:'chains', unit:'per meter', price:240, color:'#F3ECE1', stroke:'var(--gold-deep)'},
-  {id:'ch207', name:'Cable Chain — Silver Plated', sku:'JSK-CH-207', cat:'chains', unit:'per meter', price:210, color:'#EFEFEF', stroke:'var(--sapphire)'},
-  {id:'ch215', name:'Ball Chain 2mm — Antique Brass', sku:'JSK-CH-215', cat:'chains', unit:'per meter', price:160, color:'#F1E9DD', stroke:'var(--gold-deep)'},
+  {id:'ch201', name:'Curb Chain — Gold Plated', sku:'JSK-CH-201', cat:'chains', unit:'per meter', price:240, color:'#F3ECE1', stroke:'var(--gold-deep)', img:null},
+  {id:'ch207', name:'Cable Chain — Silver Plated', sku:'JSK-CH-207', cat:'chains', unit:'per meter', price:210, color:'#EFEFEF', stroke:'var(--sapphire)', img:null},
+  {id:'ch215', name:'Ball Chain 2mm — Antique Brass', sku:'JSK-CH-215', cat:'chains', unit:'per meter', price:160, color:'#F1E9DD', stroke:'var(--gold-deep)', img:null},
 
-  {id:'fd301', name:'Jump Rings — Mixed Sizes', sku:'JSK-FD-301', cat:'findings', unit:'per 100pc', price:90, color:'#F1E9DD', stroke:'var(--gold-deep)'},
-  {id:'fd308', name:'Lobster Clasps — Gold Tone', sku:'JSK-FD-308', cat:'findings', unit:'per 20pc', price:140, color:'#F3ECE1', stroke:'var(--gold-deep)'},
-  {id:'fd316', name:'Head Pins 3cm — Silver Tone', sku:'JSK-FD-316', cat:'findings', unit:'per 100pc', price:110, color:'#EFEFEF', stroke:'var(--sapphire)'},
+  {id:'fd301', name:'Jump Rings — Mixed Sizes', sku:'JSK-FD-301', cat:'findings', unit:'per 100pc', price:90, color:'#F1E9DD', stroke:'var(--gold-deep)', img:null},
+  {id:'fd308', name:'Lobster Clasps — Gold Tone', sku:'JSK-FD-308', cat:'findings', unit:'per 20pc', price:140, color:'#F3ECE1', stroke:'var(--gold-deep)', img:null},
+  {id:'fd316', name:'Head Pins 3cm — Silver Tone', sku:'JSK-FD-316', cat:'findings', unit:'per 100pc', price:110, color:'#EFEFEF', stroke:'var(--sapphire)', img:null},
 
-  {id:'st401', name:'Rose Quartz Chip Beads', sku:'JSK-ST-401', cat:'stones', unit:'per strand', price:380, color:'#F3E7E3', stroke:'var(--rose)'},
-  {id:'st409', name:'Turquoise Cabochons — 10mm', sku:'JSK-ST-409', cat:'stones', unit:'per 10pc', price:450, color:'#EAF0EC', stroke:'var(--emerald)'},
-  {id:'st417', name:'Amethyst Tumbled Beads', sku:'JSK-ST-417', cat:'stones', unit:'per strand', price:520, color:'#ECE7F1', stroke:'var(--sapphire)'},
+  {id:'st401', name:'Rose Quartz Chip Beads', sku:'JSK-ST-401', cat:'stones', unit:'per strand', price:380, color:'#F3E7E3', stroke:'var(--rose)', img:null},
+  {id:'st409', name:'Turquoise Cabochons — 10mm', sku:'JSK-ST-409', cat:'stones', unit:'per 10pc', price:450, color:'#EAF0EC', stroke:'var(--emerald)', img:null},
+  {id:'st417', name:'Amethyst Tumbled Beads', sku:'JSK-ST-417', cat:'stones', unit:'per strand', price:520, color:'#ECE7F1', stroke:'var(--sapphire)', img:null},
 
-  {id:'wr501', name:'Copper Wire 0.6mm', sku:'JSK-WR-501', cat:'wire', unit:'per 10m spool', price:150, color:'#F3ECE1', stroke:'var(--gold-deep)'},
-  {id:'wr508', name:'Memory Wire — Bracelet Size', sku:'JSK-WR-508', cat:'wire', unit:'per 10-coil pack', price:220, color:'#EFEFEF', stroke:'var(--ink)'},
-  {id:'wr513', name:'Silver Plated Wire 0.4mm', sku:'JSK-WR-513', cat:'wire', unit:'per 10m spool', price:190, color:'#EFEFEF', stroke:'var(--sapphire)'},
+  {id:'wr501', name:'Copper Wire 0.6mm', sku:'JSK-WR-501', cat:'wire', unit:'per 10m spool', price:150, color:'#F3ECE1', stroke:'var(--gold-deep)', img:null},
+  {id:'wr508', name:'Memory Wire — Bracelet Size', sku:'JSK-WR-508', cat:'wire', unit:'per 10-coil pack', price:220, color:'#EFEFEF', stroke:'var(--ink)', img:null},
+  {id:'wr513', name:'Silver Plated Wire 0.4mm', sku:'JSK-WR-513', cat:'wire', unit:'per 10m spool', price:190, color:'#EFEFEF', stroke:'var(--sapphire)', img:null},
 
-  {id:'tl601', name:'Round Nose Pliers', sku:'JSK-TL-601', cat:'tools', unit:'per piece', price:480, color:'#EFEFEF', stroke:'var(--ink)'},
-  {id:'tl607', name:'Flush Wire Cutters', sku:'JSK-TL-607', cat:'tools', unit:'per piece', price:550, color:'#EFEFEF', stroke:'var(--ink)'},
-  {id:'tl612', name:'Bead Design Board', sku:'JSK-TL-612', cat:'tools', unit:'per piece', price:350, color:'#F3ECE1', stroke:'var(--gold-deep)'},
+  {id:'tl601', name:'Round Nose Pliers', sku:'JSK-TL-601', cat:'tools', unit:'per piece', price:480, color:'#EFEFEF', stroke:'var(--ink)', img:null},
+  {id:'tl607', name:'Flush Wire Cutters', sku:'JSK-TL-607', cat:'tools', unit:'per piece', price:550, color:'#EFEFEF', stroke:'var(--ink)', img:null},
+  {id:'tl612', name:'Bead Design Board', sku:'JSK-TL-612', cat:'tools', unit:'per piece', price:350, color:'#F3ECE1', stroke:'var(--gold-deep)', img:null},
 ];
 
 const ICONS = {
@@ -665,7 +694,7 @@ function renderCatalog(){
     const card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML = `
-      <div class="product-media" style="background:${p.color};">${iconFor(p.cat, p.stroke)}</div>
+      <div class="product-media" style="background:${p.color};">${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : iconFor(p.cat, p.stroke)}</div>
       <div class="product-info">
         <h3>${p.name}</h3>
         <div class="product-sku mono">${p.sku}</div>
@@ -789,7 +818,7 @@ function renderCart(){
     total += lineTotal;
     return `
       <div class="cart-item">
-        <div class="thumb" style="background:${e.color};">${iconFor(e.cat, e.stroke)}</div>
+        <div class="thumb" style="background:${e.color};">${e.img ? `<img src="${e.img}" alt="${e.name}">` : iconFor(e.cat, e.stroke)}</div>
         <div class="ci-info">
           <h4>${e.name}</h4>
           <div class="sku mono">${e.sku}</div>
@@ -834,21 +863,23 @@ function buildOrderMessage(customer){
   const entries = cartEntries();
   let total = 0;
   let itemLines = '';
-  entries.forEach((e,i) => {
+  entries.forEach(e => {
     const lineTotal = e.price * e.qty;
     total += lineTotal;
-    itemLines += `${i+1}. ${e.name} (${e.sku})\n   Qty: ${e.qty}  ×  Rs.${e.price}  =  Rs.${lineTotal}\n`;
+    itemLines += `• ${e.name} (Qty: ${e.qty}) - Rs. ${lineTotal.toLocaleString('en-IN')}\n`;
   });
 
-  let msg = `Hello JSK Creation, I would like to place an order.\n\n`;
-  msg += `ORDER DETAILS\n${itemLines}\nTotal: Rs. ${total}\n\n`;
-  msg += `CUSTOMER DETAILS\n`;
-  msg += `Name: ${customer.name}\n`;
-  msg += `Phone: ${customer.phone}\n`;
-  msg += `Address: ${customer.address}\n`;
-  msg += `City: ${customer.city}\n`;
-  if(customer.notes) msg += `Notes: ${customer.notes}\n`;
-  msg += `\nPlease confirm availability and delivery time. Thank you.`;
+  let msg = `JSK CREATION - NEW ORDER RECEIVED\n\n`;
+  msg += `Customer Details:\n`;
+  msg += `• Name: ${customer.name}\n`;
+  msg += `• WhatsApp Contact: ${customer.phone}\n`;
+  msg += `• Complete Shipping Address: ${customer.address}, ${customer.city}\n\n`;
+  msg += `Ordered Materials:\n${itemLines}\n`;
+  msg += `Financial Summary:\n`;
+  msg += `• Subtotal: Rs. ${total.toLocaleString('en-IN')}\n`;
+  msg += `• Total Bill: Rs. ${total.toLocaleString('en-IN')}\n`;
+  if(customer.notes) msg += `\n• Notes: ${customer.notes}\n`;
+  msg += `\nPlease confirm my order and share payment / shipping options. Shukriya!`;
   return msg;
 }
 
@@ -883,6 +914,7 @@ function openPlainChat(){
 }
 document.getElementById('heroWaBtn').addEventListener('click', (e) => { e.preventDefault(); openPlainChat(); });
 document.getElementById('footWaLink').addEventListener('click', (e) => { e.preventDefault(); openPlainChat(); });
+document.getElementById('footWaIcon').addEventListener('click', (e) => { e.preventDefault(); openPlainChat(); });
 document.getElementById('waFab').addEventListener('click', () => {
   if(cartEntries().length > 0){ openDrawer(); } else { openPlainChat(); }
 });
