@@ -491,6 +491,15 @@
       .tray-photo {
         transition: transform 0.25s ease;
       }
+      .product-card.out-of-stock {
+        opacity: 0.6;
+        filter: grayscale(0.35);
+      }
+      .product-card.out-of-stock:hover {
+        transform: none;
+        box-shadow: var(--shadow-soft);
+        border-color: var(--line);
+      }
 
       /* punched hang-tag hole at the top, with a faint string loop above it */
       .tag-hole {
@@ -605,6 +614,23 @@
         font-weight: 700;
       }
 
+      /* out-of-stock ribbon pinned to the swatch */
+      .stock-flag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+        background: var(--ruby);
+        color: #fff;
+        font-family: "Space Mono", monospace;
+        font-size: 9.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        border-radius: 999px;
+        box-shadow: var(--shadow-soft);
+      }
+
       /* perforated tear-line with cut-through notches on both edges, like a ticket stub */
       .tear-line {
         position: relative;
@@ -682,6 +708,18 @@
         border-color: var(--emerald);
         border-style: solid;
         color: #fff;
+      }
+      .add-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-style: solid;
+        border-color: var(--line);
+        color: var(--ink-soft);
+        background: var(--paper);
+      }
+      .add-btn:disabled:hover {
+        background: var(--paper);
+        color: var(--ink-soft);
       }
 
       /* ============ HOW IT WORKS ============ */
@@ -852,6 +890,15 @@
         flex-wrap: wrap;
         gap: 8px;
       }
+      .foot-admin-link {
+        color: #7a6f61;
+        font-size: 11.5px;
+        letter-spacing: 0.04em;
+        transition: color 0.15s ease;
+      }
+      .foot-admin-link:hover {
+        color: var(--gold-bright);
+      }
 
       /* ============ SHARED QTY STEPPER ============ */
       .qty-stepper {
@@ -872,6 +919,10 @@
       }
       .qty-stepper button:hover {
         background: var(--paper);
+      }
+      .qty-stepper button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
       }
       .qty-stepper span {
         width: 26px;
@@ -1200,6 +1251,21 @@
         border: 1px solid rgba(173, 138, 84, 0.3);
       }
 
+      .modal-stock-tag {
+        position: absolute;
+        top: 16px;
+        right: 58px;
+        z-index: 2;
+        background: var(--ruby);
+        color: #fff;
+        font-family: "Space Mono", monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border-radius: 999px;
+      }
+
       .modal-info {
         padding: 26px 26px 28px;
         position: relative;
@@ -1351,6 +1417,14 @@
         }
       }
 
+      .catalog-loading {
+        text-align: center;
+        padding: 60px 10px;
+        color: var(--ink-soft);
+        font-size: 14px;
+        grid-column: 1 / -1;
+      }
+
       .visually-hidden {
         position: absolute;
         width: 1px;
@@ -1460,7 +1534,9 @@
           </label>
         </div>
 
-        <div class="product-grid" id="productGrid"></div>
+        <div class="product-grid" id="productGrid">
+          <div class="catalog-loading" id="catalogLoading">Loading catalog…</div>
+        </div>
       </div>
     </section>
 
@@ -1685,7 +1761,10 @@
         </div>
         <div class="foot-bottom">
           <span>© 2026 JSK Creation. All rights reserved.</span>
-          <span>Orders are placed directly over WhatsApp.</span>
+          <span
+            >Orders are placed directly over WhatsApp. ·
+            <a href="warehouse.html" class="foot-admin-link">Warehouse</a></span
+          >
         </div>
       </div>
     </footer>
@@ -1860,235 +1939,26 @@
    ===================================================== */
       const WHATSAPP_NUMBER = "923052181963"; // <-- PUT YOUR REAL NUMBER HERE
 
-      /* ============ PRODUCT DATA ============
-   To add a real photo for any product, set its "img" to an image URL, e.g.:
-     img: "https://your-image-host.com/gold-chain.jpg"
-   Leave it as null to keep the plain icon shown now.
-   See the note below the catalog section for hosting options.
+      /* ============ LIVE CATALOG (synced from the Warehouse) ============
+   Products are no longer hardcoded here. They are loaded live from the
+   same Firebase project the Warehouse (script.js) writes to, under the
+   "jsk-creation" collection, document "items" — the exact same place
+   the Warehouse's Inventory tab saves to via storeSet('items', ...).
+   That means: add/edit/delete an item in the Warehouse, and it appears
+   here automatically (in real time, no refresh needed). When an item's
+   quantity hits 0, it's shown here as "Out of Stock" automatically.
    ==================================================== */
-      const PRODUCTS = [
-        {
-          id: "bd101",
-          name: "Moon",
-          sku: "JSK-BD-101",
-          cat: "beads",
-          unit: "per 50g pack",
-          price: 180,
-          color: "#F3ECE1",
-          stroke: "var(--gold-deep)",
-          img: "moon.jpeg",
-          desc: "Vibrant mixed-colour glass seed beads, perfect for bracelets, multi-strand designs and embroidery work.",
-        },
-        {
-          id: "bd114",
-          name: " Small Lotus",
-          sku: "JSK-BD-114",
-          cat: "beads",
-          unit: "per strand",
-          price: 650,
-          color: "#F1E9DD",
-          stroke: "var(--gold-deep)",
-          img: "lotus.png",
-          desc: "Smooth round freshwater pearls with natural lustre, ideal for classic necklace and earring sets.",
-        },
-        {
-          id: "bd122",
-          name: "Faceted Crystal Beads — 6mm",
-          sku: "JSK-BD-122",
-          cat: "beads",
-          unit: "per 20pc pack",
-          price: 320,
-          color: "#EAF0EC",
-          stroke: "var(--sapphire)",
-          img: null,
-          desc: "Machine-cut faceted crystal beads that catch the light beautifully in earrings and chandeliers.",
-        },
-
-        {
-          id: "ch201",
-          name: "Curb Chain — Gold Plated",
-          sku: "JSK-CH-201",
-          cat: "chains",
-          unit: "per meter",
-          price: 240,
-          color: "#F3ECE1",
-          stroke: "var(--gold-deep)",
-          img: null,
-          desc: "Sturdy gold-plated curb chain for necklaces, anklets and layered jewellery pieces.",
-        },
-        {
-          id: "ch207",
-          name: "Cable Chain — Silver Plated",
-          sku: "JSK-CH-207",
-          cat: "chains",
-          unit: "per meter",
-          price: 210,
-          color: "#EFEFEF",
-          stroke: "var(--sapphire)",
-          img: null,
-          desc: "Fine silver-plated cable chain, a versatile base for pendants and charm bracelets.",
-        },
-        {
-          id: "ch215",
-          name: "Ball Chain 2mm — Antique Brass",
-          sku: "JSK-CH-215",
-          cat: "chains",
-          unit: "per meter",
-          price: 160,
-          color: "#F1E9DD",
-          stroke: "var(--gold-deep)",
-          img: null,
-          desc: "Classic 2mm ball chain in an antique brass finish, great for minimalist pieces.",
-        },
-
-        {
-          id: "fd301",
-          name: "Jump Rings — Mixed Sizes",
-          sku: "JSK-FD-301",
-          cat: "findings",
-          unit: "per 100pc",
-          price: 90,
-          color: "#F1E9DD",
-          stroke: "var(--gold-deep)",
-          img: null,
-          desc: "Assorted jump ring sizes for connecting charms, clasps and chain sections.",
-        },
-        {
-          id: "fd308",
-          name: "Lobster Clasps — Gold Tone",
-          sku: "JSK-FD-308",
-          cat: "findings",
-          unit: "per 20pc",
-          price: 140,
-          color: "#F3ECE1",
-          stroke: "var(--gold-deep)",
-          img: null,
-          desc: "Secure gold-tone lobster clasps for finishing bracelets and necklaces.",
-        },
-        {
-          id: "fd316",
-          name: "Head Pins 3cm — Silver Tone",
-          sku: "JSK-FD-316",
-          cat: "findings",
-          unit: "per 100pc",
-          price: 110,
-          color: "#EFEFEF",
-          stroke: "var(--sapphire)",
-          img: null,
-          desc: "Silver-tone head pins for making dangle earrings and beaded charms.",
-        },
-
-        {
-          id: "st401",
-          name: "Rose Quartz Chip Beads",
-          sku: "JSK-ST-401",
-          cat: "stones",
-          unit: "per strand",
-          price: 380,
-          color: "#F3E7E3",
-          stroke: "var(--rose)",
-          img: null,
-          desc: "Natural rose quartz chip beads with soft pink tones — no two strands alike.",
-        },
-        {
-          id: "st409",
-          name: "Turquoise Cabochons — 10mm",
-          sku: "JSK-ST-409",
-          cat: "stones",
-          unit: "per 10pc",
-          price: 450,
-          color: "#EAF0EC",
-          stroke: "var(--emerald)",
-          img: null,
-          desc: "Genuine turquoise cabochons, perfect centrepieces for rings and pendants.",
-        },
-        {
-          id: "st417",
-          name: "Amethyst Tumbled Beads",
-          sku: "JSK-ST-417",
-          cat: "stones",
-          unit: "per strand",
-          price: 520,
-          color: "#ECE7F1",
-          stroke: "var(--sapphire)",
-          img: null,
-          desc: "Tumbled amethyst beads with a deep purple hue, popular for statement jewellery.",
-        },
-
-        {
-          id: "wr501",
-          name: "Copper Wire 0.6mm",
-          sku: "JSK-WR-501",
-          cat: "wire",
-          unit: "per 10m spool",
-          price: 150,
-          color: "#F3ECE1",
-          stroke: "var(--gold-deep)",
-          img: null,
-          desc: "Soft copper wire for wire-wrapping, coiling and handmade findings.",
-        },
-        {
-          id: "wr508",
-          name: "Memory Wire — Bracelet Size",
-          sku: "JSK-WR-508",
-          cat: "wire",
-          unit: "per 10-coil pack",
-          price: 220,
-          color: "#EFEFEF",
-          stroke: "var(--ink)",
-          img: null,
-          desc: "Ready-shaped memory wire that holds a bracelet's coil — no clasp needed.",
-        },
-        {
-          id: "wr513",
-          name: "Silver Plated Wire 0.4mm",
-          sku: "JSK-WR-513",
-          cat: "wire",
-          unit: "per 10m spool",
-          price: 190,
-          color: "#EFEFEF",
-          stroke: "var(--sapphire)",
-          img: null,
-          desc: "Fine silver-plated wire for delicate wire work and wrapped pendants.",
-        },
-
-        {
-          id: "tl601",
-          name: "Round Nose Pliers",
-          sku: "JSK-TL-601",
-          cat: "tools",
-          unit: "per piece",
-          price: 480,
-          color: "#EFEFEF",
-          stroke: "var(--ink)",
-          img: null,
-          desc: "Round nose pliers for shaping loops and curves in wire work.",
-        },
-        {
-          id: "tl607",
-          name: "Flush Wire Cutters",
-          sku: "JSK-TL-607",
-          cat: "tools",
-          unit: "per piece",
-          price: 550,
-          color: "#EFEFEF",
-          stroke: "var(--ink)",
-          img: null,
-          desc: "Precision flush cutters for a clean, flat cut on wire and head pins.",
-        },
-        {
-          id: "tl612",
-          name: "Bead Design Board",
-          sku: "JSK-TL-612",
-          cat: "tools",
-          unit: "per piece",
-          price: 350,
-          color: "#F3ECE1",
-          stroke: "var(--gold-deep)",
-          img: null,
-          desc: "A grooved bead design board for planning and measuring necklace and bracelet layouts.",
-        },
-      ];
+      const firebaseConfig = {
+        apiKey: "AIzaSyAP1W9aEd6alEs-3Ac2s36ecRT6sIkzkFs",
+        authDomain: "jsk-creation.firebaseapp.com",
+        projectId: "jsk-creation",
+        storageBucket: "jsk-creation.firebasestorage.app",
+        messagingSenderId: "682729907422",
+        appId: "1:682729907422:web:7a2b9a127ef70a4e0e8e4f",
+        measurementId: "G-1QGH1N1EMR",
+      };
+      const FIRESTORE_COLLECTION = "jsk-creation";
+      const LS_CACHE_KEY = "jsk-creation:items";
 
       const CAT_LABELS = {
         beads: "Beads",
@@ -2114,13 +1984,111 @@
       };
 
       function iconFor(cat, color) {
-        return ICONS[cat].replace("{c}", color);
+        const key = ICONS[cat] ? cat : "beads";
+        return ICONS[key].replace("{c}", color || "var(--gold-deep)");
+      }
+
+      /* fallback tint per category so cards still look right if the
+   warehouse item has no explicit color/stroke set */
+      const CAT_TINTS = {
+        beads: { bg: "#F3ECE1", stroke: "var(--gold-deep)" },
+        chains: { bg: "#F3ECE1", stroke: "var(--gold-deep)" },
+        findings: { bg: "#F1E9DD", stroke: "var(--gold-deep)" },
+        stones: { bg: "#EAF0EC", stroke: "var(--emerald)" },
+        wire: { bg: "#F3ECE1", stroke: "var(--gold-deep)" },
+        tools: { bg: "#EFEFEF", stroke: "var(--ink)" },
+      };
+
+      const UNIT_TEXT = {
+        pc: "per piece",
+        pair: "per pair",
+        packet: "per packet",
+        yard: "per yard",
+        gram: "per gram",
+      };
+
+      /* Turns one Warehouse inventory item into the shape the catalog
+   renderer below expects. Warehouse items look like:
+   {id, name, img, color, qty, price, unit, unitLabel, cat, desc, sku} */
+      function toProduct(raw) {
+        const cat = CAT_LABELS[raw.cat] ? raw.cat : "beads";
+        const tint = CAT_TINTS[cat];
+        return {
+          id: raw.id,
+          name: raw.name || "Untitled item",
+          sku: raw.sku && raw.sku.trim() ? raw.sku : "JSK-" + String(raw.id).slice(-6).toUpperCase(),
+          cat: cat,
+          unit: (raw.unitLabel && raw.unitLabel.trim()) || UNIT_TEXT[raw.unit] || "per piece",
+          price: Number(raw.price) || 0,
+          color: raw.color || tint.bg,
+          stroke: raw.stroke || tint.stroke,
+          img: raw.img && raw.img.trim() ? raw.img : null,
+          desc: raw.desc || "",
+          stock: Number(raw.qty) || 0,
+        };
       }
 
       /* ============ STATE (in-memory only) ============ */
+      let PRODUCTS = [];
       let cart = {}; // id -> qty
       let activeFilter = "all";
       let activeSort = "featured";
+      let catalogReady = false;
+
+      /* ============ LOAD PRODUCTS FROM FIREBASE (live) ============ */
+      async function startCatalogSync() {
+        // show any cached copy immediately so the page isn't empty on load
+        try {
+          const cached = localStorage.getItem(LS_CACHE_KEY);
+          if (cached) {
+            const items = JSON.parse(cached);
+            PRODUCTS = items.map(toProduct);
+            catalogReady = true;
+            renderCatalog();
+          }
+        } catch (e) {}
+
+        try {
+          const appMod = await import(
+            "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js"
+          );
+          const fsMod = await import(
+            "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js"
+          );
+          const app = appMod.initializeApp(firebaseConfig);
+          const db = fsMod.getFirestore(app);
+          const ref = fsMod.doc(db, FIRESTORE_COLLECTION, "items");
+
+          fsMod.onSnapshot(
+            ref,
+            (snap) => {
+              if (!snap.exists()) return;
+              // script.js (Warehouse) writes the items array directly to
+              // Firestore via setDoc({ value: array }) — not as a JSON
+              // string — so we read it back the same way here.
+              const items = Array.isArray(snap.data().value)
+                ? snap.data().value
+                : [];
+              try {
+                localStorage.setItem(LS_CACHE_KEY, JSON.stringify(items));
+              } catch (e) {}
+              PRODUCTS = items.map(toProduct);
+              catalogReady = true;
+              renderCatalog();
+              renderCart(); // refresh stock-aware cart state too
+            },
+            (err) => {
+              console.error("Catalog live sync failed:", err);
+              catalogReady = true;
+              renderCatalog();
+            }
+          );
+        } catch (e) {
+          console.error("Could not connect catalog to warehouse:", e);
+          catalogReady = true;
+          renderCatalog();
+        }
+      }
 
       /* ============ RENDER CATALOG ============ */
       const grid = document.getElementById("productGrid");
@@ -2137,18 +2105,35 @@
       }
 
       function renderCatalog() {
+        if (!catalogReady) return;
         grid.innerHTML = "";
+
+        if (PRODUCTS.length === 0) {
+          grid.innerHTML =
+            '<div class="catalog-loading">No items in the catalog yet. Add items from the Warehouse.</div>';
+          return;
+        }
+
         let list =
           activeFilter === "all"
             ? PRODUCTS
             : PRODUCTS.filter((p) => p.cat === activeFilter);
         list = sortList(list);
+
+        if (list.length === 0) {
+          grid.innerHTML =
+            '<div class="catalog-loading">No items in this category yet.</div>';
+          return;
+        }
+
         list.forEach((p) => {
+          const outOfStock = p.stock <= 0;
           const card = document.createElement("div");
-          card.className = "product-card";
+          card.className = "product-card" + (outOfStock ? " out-of-stock" : "");
           card.dataset.view = p.id;
           card.innerHTML = `
       <div class="tag-hole"></div>
+      ${outOfStock ? '<span class="stock-flag">Out of stock</span>' : ""}
       <div class="specimen-tray">
         ${
           p.img
@@ -2163,7 +2148,7 @@
         <h3>${p.name}</h3>
         <div class="product-unit">${p.unit}</div>
       </div>
-      <button class="add-btn" data-add="${p.id}">+ Add to order</button>
+      <button class="add-btn" data-add="${p.id}" ${outOfStock ? "disabled" : ""}>${outOfStock ? "Out of stock" : "+ Add to order"}</button>
     `;
           grid.appendChild(card);
         });
@@ -2172,14 +2157,21 @@
       grid.addEventListener("click", (e) => {
         const addBtn = e.target.closest("[data-add]");
         if (addBtn) {
+          if (addBtn.disabled) return;
           const id = addBtn.dataset.add;
-          cart[id] = (cart[id] || 0) + 1;
+          const p = PRODUCTS.find((pr) => pr.id === id);
+          if (!p) return;
+          const nextQty = (cart[id] || 0) + 1;
+          if (nextQty > p.stock) return; // don't exceed available stock
+          cart[id] = nextQty;
           renderCart();
           addBtn.textContent = "Added ✓";
           addBtn.classList.add("added");
           setTimeout(() => {
-            addBtn.textContent = "Add to cart";
-            addBtn.classList.remove("added");
+            if (!addBtn.disabled) {
+              addBtn.textContent = "+ Add to order";
+              addBtn.classList.remove("added");
+            }
           }, 1100);
           return;
         }
@@ -2204,11 +2196,13 @@
         const p = PRODUCTS.find((pr) => pr.id === id);
         if (!p) return;
         modalProductId = id;
-        modalQty = 1;
+        modalQty = p.stock > 0 ? 1 : 0;
+        const outOfStock = p.stock <= 0;
 
         document.getElementById("modalMedia").style.background = p.color;
         document.getElementById("modalMedia").innerHTML =
           `<span class="modal-cat-tag">${CAT_LABELS[p.cat] || p.cat}</span>` +
+          (outOfStock ? '<span class="modal-stock-tag">Out of stock</span>' : "") +
           (p.img
             ? `<img src="${p.img}" alt="${p.name}">`
             : iconFor(p.cat, p.stroke));
@@ -2219,6 +2213,14 @@
         document.getElementById("modalPrice").textContent = "Rs. " + p.price;
         document.getElementById("modalQty").textContent = modalQty;
         updateModalSubtotal(p.price);
+
+        const stepperBtns = document.querySelectorAll(
+          '#modalQtyStepper button'
+        );
+        stepperBtns.forEach((b) => (b.disabled = outOfStock));
+        const addBtn = document.getElementById("modalAddBtn");
+        addBtn.disabled = outOfStock;
+        addBtn.textContent = outOfStock ? "Out of stock" : "Add to cart";
 
         detailOverlay.classList.add("open");
         productModal.classList.add("open");
@@ -2238,18 +2240,22 @@
       document
         .getElementById("modalQtyStepper")
         .addEventListener("click", (e) => {
+          const p = PRODUCTS.find((pr) => pr.id === modalProductId);
+          if (!p || p.stock <= 0) return;
           const dec = e.target.closest('[data-modal-act="dec"]');
           const inc = e.target.closest('[data-modal-act="inc"]');
           if (dec) modalQty = Math.max(1, modalQty - 1);
-          if (inc) modalQty = Math.min(99, modalQty + 1);
+          if (inc) modalQty = Math.min(p.stock, 99, modalQty + 1);
           document.getElementById("modalQty").textContent = modalQty;
-          const p = PRODUCTS.find((pr) => pr.id === modalProductId);
-          if (p) updateModalSubtotal(p.price);
+          updateModalSubtotal(p.price);
         });
 
       document.getElementById("modalAddBtn").addEventListener("click", () => {
         if (!modalProductId) return;
-        cart[modalProductId] = (cart[modalProductId] || 0) + modalQty;
+        const p = PRODUCTS.find((pr) => pr.id === modalProductId);
+        if (!p || p.stock <= 0) return;
+        const nextQty = (cart[modalProductId] || 0) + modalQty;
+        cart[modalProductId] = Math.min(nextQty, p.stock);
         renderCart();
         const btn = document.getElementById("modalAddBtn");
         const original = btn.textContent;
@@ -2324,13 +2330,20 @@
         .getElementById("backToCartBtn")
         .addEventListener("click", showCartView);
 
+      /* cart entries, clamped live against current warehouse stock —
+   if stock drops below what's in the cart (or hits 0), the cart
+   quantity is pulled down to match automatically */
       function cartEntries() {
         return Object.entries(cart)
           .filter(([id, qty]) => qty > 0)
           .map(([id, qty]) => {
             const p = PRODUCTS.find((pr) => pr.id === id);
-            return { ...p, qty };
-          });
+            if (!p) return null;
+            const clampedQty = Math.min(qty, p.stock);
+            if (clampedQty !== qty) cart[id] = clampedQty;
+            return clampedQty > 0 ? { ...p, qty: clampedQty } : null;
+          })
+          .filter(Boolean);
       }
 
       function renderCart() {
@@ -2362,7 +2375,7 @@
             <div class="qty-stepper">
               <button data-cart-act="dec" data-cart-id="${e.id}" aria-label="Decrease quantity">–</button>
               <span>${e.qty}</span>
-              <button data-cart-act="inc" data-cart-id="${e.id}" aria-label="Increase quantity">+</button>
+              <button data-cart-act="inc" data-cart-id="${e.id}" aria-label="Increase quantity" ${e.qty >= e.stock ? "disabled" : ""}>+</button>
             </div>
             <span class="line-total">Rs. ${lineTotal}</span>
           </div>
@@ -2387,7 +2400,9 @@
         }
         if (incBtn) {
           const id = incBtn.dataset.cartId;
-          cart[id] = (cart[id] || 0) + 1;
+          const p = PRODUCTS.find((pr) => pr.id === id);
+          const max = p ? p.stock : 99;
+          cart[id] = Math.min(max, (cart[id] || 0) + 1);
           renderCart();
         }
         if (clearBtn) {
@@ -2477,8 +2492,8 @@
       });
 
       /* ============ INIT ============ */
-      renderCatalog();
       renderCart();
+      startCatalogSync();
     </script>
   </body>
 </html>
