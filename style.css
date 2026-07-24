@@ -11,8 +11,32 @@
     --teal-soft:#DCEEEC;
     --danger:#A23B2E;
     --shadow: 0 1px 2px rgba(36,28,31,0.06), 0 6px 20px rgba(36,28,31,0.06);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
   }
   *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{
+      animation-duration:0.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+  @keyframes fadeSlideUp{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes fadeScaleIn{
+    from{opacity:0; transform:scale(0.96) translateY(8px);}
+    to{opacity:1; transform:scale(1) translateY(0);}
+  }
+  @keyframes backdropFadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
   html, body{
     margin:0;
     padding:0;
@@ -101,13 +125,15 @@
     align-items:center;
     gap:10px;
     min-width:0;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.25s var(--ease-soft), color 0.25s var(--ease-soft), transform 0.15s var(--ease);
   }
+  .nav button:active{transform:scale(0.98);}
   .nav button .dot{
     width:6px;height:6px;border-radius:50%;background:rgba(246,233,217,0.35);
     flex:0 0 auto;
-    transition: background 0.15s ease;
+    transition: background 0.25s var(--ease-soft), transform 0.25s var(--ease);
   }
+  .nav button.active .dot{transform:scale(1.15);}
   .nav button:hover{background:rgba(246,233,217,0.08);}
   .nav button.active{background:rgba(201,151,59,0.22); color:#FBF6EC;}
   .nav button.active .dot{background:var(--gold);}
@@ -176,6 +202,7 @@
     border-radius:14px;
     padding:32px 30px;
     box-shadow:var(--shadow);
+    animation: fadeSlideUp 0.5s var(--ease) both;
   }
   .gate-error{
     background:#FBEEEA;
@@ -185,10 +212,11 @@
     padding:9px 12px;
     font-size:13px;
     margin:0 0 14px;
+    animation: fadeSlideUp 0.3s var(--ease) both;
   }
 
   /* ---------- main ---------- */
-  .main{flex:1 1 auto; padding:36px 44px; max-width:1180px; min-width:0; width:100%;}
+  .main{flex:1 1 auto; padding:36px 44px; max-width:1180px; min-width:0; width:100%; animation: fadeSlideUp 0.4s var(--ease) both;}
   .page-head{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;}
   .page-head h1{
     font-family:'Fraunces', serif;
@@ -210,9 +238,9 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.15s ease;
+    transition: transform 0.15s var(--ease), box-shadow 0.25s var(--ease-soft), background 0.25s var(--ease-soft);
   }
-  .btn:active{transform: translateY(1px);}
+  .btn:active{transform: scale(0.97);}
   .btn-primary{background:var(--maroon); color:#FBF6EC;}
   .btn-primary:hover{box-shadow:var(--shadow); background:var(--maroon-dark);}
   .btn-gold{background:var(--gold); color:#3A2A0E;}
@@ -256,7 +284,7 @@
   }
   tbody td{padding:12px 10px; border-bottom:1px solid #F1EADA; vertical-align:middle; overflow-wrap:break-word;}
   tbody tr:last-child td{border-bottom:none;}
-  tbody tr{transition: background 0.12s ease;}
+  tbody tr{transition: background 0.2s var(--ease-soft);}
   tbody tr:hover{background:#FCFAF3;}
   .thumb{
     width:36px; height:36px; border-radius:8px; overflow:hidden; flex:0 0 auto;
@@ -282,7 +310,7 @@
     font-family:'IBM Plex Sans', sans-serif; font-size:14.5px; color:var(--ink);
     background:#FFFEFC;
     box-shadow: inset 0 1px 2px rgba(36,28,31,0.03);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    transition: border-color 0.25s var(--ease-soft), box-shadow 0.25s var(--ease-soft), background 0.25s var(--ease-soft);
     height:44px;
     max-width:100%;
     min-width:0;
@@ -402,11 +430,13 @@
     position:fixed; inset:0; background:rgba(36,28,31,0.5);
     display:flex; align-items:center; justify-content:center; z-index:50; padding:20px;
     overflow-y:auto;
+    animation: backdropFadeIn 0.22s var(--ease-soft) both;
   }
   .modal{
     background:var(--surface); border-radius:14px; padding:28px; width:100%; max-width:440px;
     box-shadow: 0 24px 64px rgba(0,0,0,0.28);
     max-height:90vh; overflow-y:auto;
+    animation: fadeScaleIn 0.28s var(--ease) both;
   }
   .modal h2{font-family:'Fraunces', serif; font-size:21px; margin:0 0 4px;}
   .modal-actions{display:flex; justify-content:flex-end; gap:10px; margin-top:20px;}
