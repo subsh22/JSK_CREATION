@@ -224,6 +224,10 @@ window.firebaseReady = (async function () {
     var user = document.getElementById("gateUser").value.trim().toLowerCase();
     var pass = document.getElementById("gatePass").value;
     gate.busy = true;
+    /* kick off the app-data fetch at the same time as the password
+       check, instead of waiting for login to finish first — the two
+       network round-trips happen together instead of back-to-back */
+    var dataPromise = fetchAppData();
     var auth = await storeGet(AUTH_KEY, null);
     var hash = await sha256Hex(pass || "");
     gate.busy = false;
@@ -238,7 +242,7 @@ window.firebaseReady = (async function () {
     }
     gate.error = "";
     setAuthedOnThisDevice(true);
-    init();
+    init(dataPromise);
   }
 
   async function boot() {
@@ -248,12 +252,11 @@ window.firebaseReady = (async function () {
       showGate();
       return;
     }
-    if (!isAuthedOnThisDevice()) {
-      gate.mode = "login";
-      showGate();
-      return;
-    }
-    init();
+    /* Always ask for the password on every fresh visit to the warehouse
+       page (including coming back via "Back to Store"), even if this
+       device logged in successfully before. */
+    gate.mode = "login";
+    showGate();
   }
 
   async function submitChangePassword() {
@@ -541,8 +544,15 @@ window.firebaseReady = (async function () {
   }
 
   /* ================= init ================= */
-  async function init() {
-    var items = await storeGet("items", null);
+  async function fetchAppData() {
+    var results = await Promise.all([
+      storeGet("items", null),
+      storeGet("invoices", []),
+      storeGet("invoiceCounter", 1000),
+    ]);
+    var items = results[0];
+    var invoices = results[1];
+    var counter = results[2];
     if (!items) {
       items = [
         {
@@ -585,13 +595,16 @@ window.firebaseReady = (async function () {
           unitLabel: "",
         },
       ];
-      await storeSet("items", items);
+      storeSet("items", items);
     }
-    var invoices = await storeGet("invoices", []);
-    var counter = await storeGet("invoiceCounter", 1000);
-    state.items = items;
-    state.invoices = invoices;
-    state.invoiceCounter = counter;
+    return { items: items, invoices: invoices, counter: counter };
+  }
+
+  async function init(dataPromise) {
+    var data = await (dataPromise || fetchAppData());
+    state.items = data.items;
+    state.invoices = data.invoices;
+    state.invoiceCounter = data.counter;
     render();
   }
 
@@ -739,7 +752,7 @@ window.firebaseReady = (async function () {
       };
       state.items.push(newlyCreatedItem);
     }
-    await saveItems();
+    saveItems();
     if (newlyCreatedItem && state.pendingLineForNewItem && state.draft) {
       var line = state.draft.lines.find(function (l) {
         return l.id === state.pendingLineForNewItem;
@@ -761,7 +774,7 @@ window.firebaseReady = (async function () {
     state.items = state.items.filter(function (i) {
       return i.id !== id;
     });
-    await saveItems();
+    saveItems();
     state.modal = null;
     render();
   }
@@ -941,9 +954,9 @@ window.firebaseReady = (async function () {
       savedId = invoice.id;
     }
 
-    await saveItems();
-    await saveInvoices();
-    await saveCounter();
+    saveItems();
+    saveInvoices();
+    saveCounter();
     state.draft = null;
     state.formErrors = null;
     state.activeInvoiceId = savedId;
@@ -1021,12 +1034,12 @@ window.firebaseReady = (async function () {
         });
         if (item) item.qty += l.qty;
       });
-      await saveItems();
+      saveItems();
     }
     state.invoices = state.invoices.filter(function (i) {
       return i.id !== id;
     });
-    await saveInvoices();
+    saveInvoices();
     state.modal = null;
     if (state.activeInvoiceId === id) {
       state.activeInvoiceId = null;
