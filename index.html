@@ -2435,20 +2435,23 @@
         entries.forEach((e) => {
           const lineTotal = e.price * e.qty;
           total += lineTotal;
-          itemLines += `• ${e.name} (Qty: ${e.qty}) - Rs. ${lineTotal.toLocaleString("en-IN")}\n`;
+          itemLines += `• *${e.name}* (Qty: ${e.qty}) - Rs. ${lineTotal.toLocaleString("en-IN")}\n`;
         });
 
-        let msg = `JSK CREATION - NEW ORDER RECEIVED\n\n`;
-        msg += `Customer Details:\n`;
-        msg += `• Name: ${customer.name}\n`;
-        msg += `• WhatsApp Contact: ${customer.phone}\n`;
-        msg += `• Complete Shipping Address: ${customer.address}, ${customer.city}\n\n`;
-        msg += `Ordered Materials:\n${itemLines}\n`;
-        msg += `Financial Summary:\n`;
+        const divider = "----------------------------------------";
+        let msg = `*JSK CREATION - NEW ORDER RECEIVED*\n`;
+        msg += `${divider}\n`;
+        msg += `*Customer Details:*\n`;
+        msg += `• *Name:* ${customer.name}\n`;
+        msg += `• *WhatsApp Contact:* ${customer.phone}\n`;
+        msg += `• *Complete Shipping Address:* ${customer.address}, ${customer.city}\n\n`;
+        msg += `*Ordered Materials:*\n${itemLines}\n`;
+        msg += `*Financial Summary:*\n`;
         msg += `• Subtotal: Rs. ${total.toLocaleString("en-IN")}\n`;
-        msg += `• Total Bill: Rs. ${total.toLocaleString("en-IN")}\n`;
-        if (customer.notes) msg += `\n• Notes: ${customer.notes}\n`;
-        msg += `\nPlease confirm my order and share payment / shipping options. Shukriya!`;
+        msg += `• *Total Bill:* Rs. ${total.toLocaleString("en-IN")}\n`;
+        if (customer.notes) msg += `\n• *Notes:* ${customer.notes}\n`;
+        msg += `${divider}\n`;
+        msg += `Please confirm my order and share payment / shipping options. Shukriya!`;
         return msg;
       }
 
